@@ -1,0 +1,391 @@
+2025-09-13 22:34:38,512 - INFO - ===== 自动运行行业资金流向分析程序 =====
+2025-09-13 22:34:38,512 - INFO - 开始运行行业资金流向分析程序
+2025-09-13 22:34:40,223 - INFO - 程序返回码: 0
+2025-09-13 22:34:40,223 - INFO - 程序标准输出:
+配置Matplotlib字体...
+Matplotlib字体配置完成
+===== 行业资金流向分析程序 =====
+注意：当前系统环境中没有安装中文字体，图表可能无法正确显示中文标签。
+建议安装中文字体如SimHei、WenQuanYi Micro Hei等以获得更好的显示效果。
+Tushare初始化成功
+
+尝试获取行业资金流向数据...
+成功获取90个行业的资金流向数据
+成功获取行业资金流向数据，进行分析和可视化...
+已保存数据到: ./output/industry_money_flow_20250913.csv
+生成可视化图表失败: Image size of 22138441x2113 pixels is too large. It must be less than 2^23 in each direction.
+
+推送消息内容:
+
+📊 2025-09-13 行业资金流向分析
+
+🔥 资金流入最多的5个行业:
+1. 半导体: 0.01万元
+2. 工业金属: 0.00万元
+3. 钢铁: 0.00万元
+4. 计算机设备: 0.00万元
+5. 小金属: 0.00万元
+
+📉 资金流出最多的3个行业:
+1. 通信设备: -0.01万元
+2. 证券: -0.01万元
+3. 银行: -0.01万元
+
+📊 市场总资金流向: -0.10万元
+
+💡 市场资金整体流出，空头力量占优
+
+===== 程序执行完毕 =====
+
+2025-09-13 22:34:40,223 - WARNING - 程序标准错误输出:
+
+  0%|          | 0/2 [00:00<?, ?it/s]
+ 50%|█████     | 1/2 [00:00<00:00,  5.74it/s]
+100%|██████████| 2/2 [00:00<00:00,  6.02it/s]
+                                             
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 36164 (\N{CJK UNIFIED IDEOGRAPH-8D44}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 37329 (\N{CJK UNIFIED IDEOGRAPH-91D1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 20928 (\N{CJK UNIFIED IDEOGRAPH-51C0}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 27969 (\N{CJK UNIFIED IDEOGRAPH-6D41}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 20837 (\N{CJK UNIFIED IDEOGRAPH-5165}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 65288 (\N{FULLWIDTH LEFT PARENTHESIS}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 19975 (\N{CJK UNIFIED IDEOGRAPH-4E07}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 20803 (\N{CJK UNIFIED IDEOGRAPH-5143}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 65289 (\N{FULLWIDTH RIGHT PARENTHESIS}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 21322 (\N{CJK UNIFIED IDEOGRAPH-534A}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 23548 (\N{CJK UNIFIED IDEOGRAPH-5BFC}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 20307 (\N{CJK UNIFIED IDEOGRAPH-4F53}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 24037 (\N{CJK UNIFIED IDEOGRAPH-5DE5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 19994 (\N{CJK UNIFIED IDEOGRAPH-4E1A}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 23646 (\N{CJK UNIFIED IDEOGRAPH-5C5E}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 38050 (\N{CJK UNIFIED IDEOGRAPH-94A2}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 38081 (\N{CJK UNIFIED IDEOGRAPH-94C1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 35745 (\N{CJK UNIFIED IDEOGRAPH-8BA1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 31639 (\N{CJK UNIFIED IDEOGRAPH-7B97}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 26426 (\N{CJK UNIFIED IDEOGRAPH-673A}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 35774 (\N{CJK UNIFIED IDEOGRAPH-8BBE}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 22791 (\N{CJK UNIFIED IDEOGRAPH-5907}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 23567 (\N{CJK UNIFIED IDEOGRAPH-5C0F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 20854 (\N{CJK UNIFIED IDEOGRAPH-5176}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 20182 (\N{CJK UNIFIED IDEOGRAPH-4ED6}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 30005 (\N{CJK UNIFIED IDEOGRAPH-7535}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 23376 (\N{CJK UNIFIED IDEOGRAPH-5B50}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 24314 (\N{CJK UNIFIED IDEOGRAPH-5EFA}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 31569 (\N{CJK UNIFIED IDEOGRAPH-7B51}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 35013 (\N{CJK UNIFIED IDEOGRAPH-88C5}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 39280 (\N{CJK UNIFIED IDEOGRAPH-9970}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 25151 (\N{CJK UNIFIED IDEOGRAPH-623F}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 22320 (\N{CJK UNIFIED IDEOGRAPH-5730}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 20135 (\N{CJK UNIFIED IDEOGRAPH-4EA7}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 22609 (\N{CJK UNIFIED IDEOGRAPH-5851}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 26009 (\N{CJK UNIFIED IDEOGRAPH-6599}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 21046 (\N{CJK UNIFIED IDEOGRAPH-5236}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 21697 (\N{CJK UNIFIED IDEOGRAPH-54C1}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 24433 (\N{CJK UNIFIED IDEOGRAPH-5F71}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 35270 (\N{CJK UNIFIED IDEOGRAPH-89C6}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 38498 (\N{CJK UNIFIED IDEOGRAPH-9662}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 32447 (\N{CJK UNIFIED IDEOGRAPH-7EBF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 34892 (\N{CJK UNIFIED IDEOGRAPH-884C}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 21521 (\N{CJK UNIFIED IDEOGRAPH-5411}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 25490 (\N{CJK UNIFIED IDEOGRAPH-6392}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 21517 (\N{CJK UNIFIED IDEOGRAPH-540D}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Glyph 21069 (\N{CJK UNIFIED IDEOGRAPH-524D}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:191: UserWarning: Tight layout not applied. The left and right margins cannot be made large enough to accommodate all Axes decorations.
+  plt.tight_layout()
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 21322 (\N{CJK UNIFIED IDEOGRAPH-534A}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 23548 (\N{CJK UNIFIED IDEOGRAPH-5BFC}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 20307 (\N{CJK UNIFIED IDEOGRAPH-4F53}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 24037 (\N{CJK UNIFIED IDEOGRAPH-5DE5}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 19994 (\N{CJK UNIFIED IDEOGRAPH-4E1A}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 37329 (\N{CJK UNIFIED IDEOGRAPH-91D1}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 23646 (\N{CJK UNIFIED IDEOGRAPH-5C5E}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 38050 (\N{CJK UNIFIED IDEOGRAPH-94A2}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 38081 (\N{CJK UNIFIED IDEOGRAPH-94C1}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 35745 (\N{CJK UNIFIED IDEOGRAPH-8BA1}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 31639 (\N{CJK UNIFIED IDEOGRAPH-7B97}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 26426 (\N{CJK UNIFIED IDEOGRAPH-673A}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 35774 (\N{CJK UNIFIED IDEOGRAPH-8BBE}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 22791 (\N{CJK UNIFIED IDEOGRAPH-5907}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 23567 (\N{CJK UNIFIED IDEOGRAPH-5C0F}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 20854 (\N{CJK UNIFIED IDEOGRAPH-5176}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 20182 (\N{CJK UNIFIED IDEOGRAPH-4ED6}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 30005 (\N{CJK UNIFIED IDEOGRAPH-7535}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 23376 (\N{CJK UNIFIED IDEOGRAPH-5B50}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 24314 (\N{CJK UNIFIED IDEOGRAPH-5EFA}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 31569 (\N{CJK UNIFIED IDEOGRAPH-7B51}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 35013 (\N{CJK UNIFIED IDEOGRAPH-88C5}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 39280 (\N{CJK UNIFIED IDEOGRAPH-9970}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 25151 (\N{CJK UNIFIED IDEOGRAPH-623F}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 22320 (\N{CJK UNIFIED IDEOGRAPH-5730}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 20135 (\N{CJK UNIFIED IDEOGRAPH-4EA7}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 22609 (\N{CJK UNIFIED IDEOGRAPH-5851}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 26009 (\N{CJK UNIFIED IDEOGRAPH-6599}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 21046 (\N{CJK UNIFIED IDEOGRAPH-5236}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 21697 (\N{CJK UNIFIED IDEOGRAPH-54C1}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 24433 (\N{CJK UNIFIED IDEOGRAPH-5F71}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 35270 (\N{CJK UNIFIED IDEOGRAPH-89C6}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 38498 (\N{CJK UNIFIED IDEOGRAPH-9662}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 32447 (\N{CJK UNIFIED IDEOGRAPH-7EBF}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 34892 (\N{CJK UNIFIED IDEOGRAPH-884C}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 36164 (\N{CJK UNIFIED IDEOGRAPH-8D44}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 27969 (\N{CJK UNIFIED IDEOGRAPH-6D41}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 21521 (\N{CJK UNIFIED IDEOGRAPH-5411}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 25490 (\N{CJK UNIFIED IDEOGRAPH-6392}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 21517 (\N{CJK UNIFIED IDEOGRAPH-540D}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 65288 (\N{FULLWIDTH LEFT PARENTHESIS}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 21069 (\N{CJK UNIFIED IDEOGRAPH-524D}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 65289 (\N{FULLWIDTH RIGHT PARENTHESIS}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 20928 (\N{CJK UNIFIED IDEOGRAPH-51C0}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 20837 (\N{CJK UNIFIED IDEOGRAPH-5165}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 19975 (\N{CJK UNIFIED IDEOGRAPH-4E07}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+/home/yijian/workspace/tushare/industry_money_flow_demo.py:195: UserWarning: Glyph 20803 (\N{CJK UNIFIED IDEOGRAPH-5143}) missing from font(s) DejaVu Sans.
+  plt.savefig(img_file, dpi=300, bbox_inches='tight')
+findfont: Font family 'SimHei' not found.
+findfont: Font family 'WenQuanYi Micro Hei' not found.
+findfont: Font family 'Heiti TC' not found.
+
+2025-09-13 22:34:40,223 - INFO - 行业资金流向分析程序运行成功
+2025-09-13 22:34:40,223 - INFO - 准备发送通知
+2025-09-13 22:34:40,223 - WARNING - 配置文件./notification_config.json不存在，已创建模板，请根据需要修改
+2025-09-13 22:34:40,223 - INFO - 从配置文件./notification_config.json加载设置成功
+2025-09-13 22:34:40,224 - INFO - 开始发送通知
+2025-09-13 22:34:41,137 - ERROR - Server酱通知发送失败: [AUTH]错误的Key
+2025-09-13 22:34:41,188 - ERROR - PushPlus通知发送失败: 用户令牌不正确
+2025-09-13 22:34:42,067 - ERROR - 邮件发送异常: [Errno -2] Name or service not known
+2025-09-13 22:34:42,273 - ERROR - 钉钉通知发送失败: token is not exist
+2025-09-13 22:34:42,274 - ERROR - 所有通知方式均发送失败
+2025-09-13 22:34:42,274 - INFO - ===== 自动运行结束 =====

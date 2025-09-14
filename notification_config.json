@@ -1,0 +1,24 @@
+{
+    "server_chan": {
+        "sendkey": "your_serverchan_sendkey"
+    },
+    "pushplus": {
+        "token": "your_pushplus_token"
+    },
+    "email": {
+        "smtp_server": "smtp.example.com",
+        "smtp_port": 465,
+        "username": "your_email@example.com",
+        "password": "your_email_password",
+        "from_email": "your_email@example.com",
+        "to_email": "recipient@example.com"
+    },
+    "dingtalk": {
+        "access_token": "your_dingtalk_access_token",
+        "secret": "your_dingtalk_secret"
+    },
+    "wechat_work": {
+        "webhook": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=65017911-ee15-42a7-90fa-00463a0451d5",
+        "secret": "your_secret"  
+    }
+}
