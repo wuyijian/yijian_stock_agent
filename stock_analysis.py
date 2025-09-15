@@ -98,7 +98,7 @@ class StockAnalyzer:
         try:
             # 尝试获取行业资金流向数据
             try:
-                fund_flow_df = ak.stock_fund_flow_industry(symbol='3日排行')
+                fund_flow_df = ak.stock_fund_flow_industry(symbol='即时')
             except Exception as e:
                 # 如果即时数据失败，尝试获取5日数据
                 self.logger.warning(f"获取即时数据失败: {e}，尝试获取5日数据...")
@@ -153,8 +153,7 @@ class StockAnalyzer:
         # 按资金净流入排序
         df = fund_flow_data.sort_values(by='净额', ascending=False)
         
-        # 转换单位为亿元
-        df['净额'] = df['净额'] / 100000000
+      
         
         # 只选择有数据的前10个行业
         top_10 = df.dropna(subset=['净额']).head(10)
@@ -208,31 +207,31 @@ class StockAnalyzer:
     
     def _visualize_industry_flow(self, top_10, current_date):
         """可视化行业资金流向数据"""
-        plt.figure(figsize=(12, 8))
+        # plt.figure(figsize=(12, 8))
         
-        # 创建水平条形图
-        bars = plt.barh(top_10['行业名称'], top_10['净额'])
+        # # 创建水平条形图
+        # bars = plt.barh(top_10['行业名称'], top_10['净额'])
         
-        # 为条形图添加数值标签
-        for bar in bars:
-            width = bar.get_width()
-            plt.text(width + 0.5, bar.get_y() + bar.get_height()/2, f'{width:,.1f}', 
-                     ha='left', va='center', fontsize=10)
+        # # 为条形图添加数值标签
+        # for bar in bars:
+        #     width = bar.get_width()
+        #     plt.text(width + 0.5, bar.get_y() + bar.get_height()/2, f'{width:,.1f}', 
+        #              ha='left', va='center', fontsize=10)
         
-        # 设置图表标题和标签
-        plt.title(f'{current_date} 行业资金流向排名（前10名）', fontsize=14)
-        plt.xlabel('资金净流入（亿元）', fontsize=12)
-        plt.ylabel('行业', fontsize=12)
+        # # 设置图表标题和标签
+        # plt.title(f'{current_date} 行业资金流向排名（前10名）', fontsize=14)
+        # plt.xlabel('资金净流入（亿元）', fontsize=12)
+        # plt.ylabel('行业', fontsize=12)
         
-        # 美化图表
-        plt.grid(axis='x', linestyle='--', alpha=0.7)
-        plt.tight_layout()
+        # # 美化图表
+        # plt.grid(axis='x', linestyle='--', alpha=0.7)
+        # plt.tight_layout()
         
         # 保存图表
-        img_file = os.path.join(self.output_dir, f'industry_money_flow_{current_date}.png')
-        plt.savefig(img_file, dpi=300, bbox_inches='tight')
-        self.logger.info(f"已保存可视化图表: {img_file}")
-        plt.close()
+        # img_file = os.path.join(self.output_dir, f'industry_money_flow_{current_date}.png')
+        # plt.savefig(img_file, dpi=300, bbox_inches='tight')
+        # self.logger.info(f"已保存可视化图表: {img_file}")
+        # plt.close()
     
     def analyze_abnormal_volume(self):
         """个股异常成交量分析"""
