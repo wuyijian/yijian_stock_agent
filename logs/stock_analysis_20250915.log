@@ -47,3 +47,17 @@
 2025-09-15 23:16:25,098 - INFO - 已保存异常成交量可视化图表: ./output/abnormal_volume_20250915.png
 2025-09-15 23:17:24,423 - INFO - 开始美股行业资金分析
 2025-09-15 23:17:24,423 - ERROR - 美股行业资金分析过程中出错: module 'akshare' has no attribute 'stock_us_dji_spot'
+2025-09-15 23:37:33,422 - INFO - 开始个股异常成交量分析
+2025-09-15 23:38:14,454 - INFO - 获取到5428只A股股票数据
+2025-09-15 23:38:14,458 - INFO - 已保存异常成交量股票数据到: ./output/abnormal_volume_stocks_20250915.csv
+2025-09-15 23:38:14,829 - INFO - 已保存异常成交量可视化图表: ./output/abnormal_volume_20250915.png
+2025-09-15 23:39:50,070 - INFO - 开始个股异常成交量分析
+2025-09-15 23:39:50,252 - ERROR - 个股异常成交量分析过程中出错: Can not decode value starting with character '<'
+2025-09-15 23:41:26,849 - INFO - 开始个股异常成交量分析
+2025-09-15 23:41:27,029 - ERROR - 个股异常成交量分析过程中出错: Can not decode value starting with character '<'
+2025-09-15 23:41:47,359 - INFO - 开始个股异常成交量分析
+2025-09-15 23:41:47,538 - ERROR - 个股异常成交量分析过程中出错: Can not decode value starting with character '<'
+2025-09-15 23:43:21,624 - INFO - 开始个股异常成交量分析
+2025-09-15 23:44:02,464 - INFO - 获取到5428只A股股票数据
+2025-09-15 23:44:02,467 - INFO - 已保存异常成交量股票数据到: ./output/abnormal_volume_stocks_20250915.csv
+2025-09-15 23:44:02,891 - INFO - 已保存异常成交量可视化图表: ./output/abnormal_volume_20250915.png

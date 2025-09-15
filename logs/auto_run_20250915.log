@@ -2,3 +2,7 @@
 2025-09-15 23:18:33,519 - INFO - 从配置文件/home/yijian/workspace/yijian_stock_agent/auto_run_config.json加载设置成功
 2025-09-15 23:18:33,521 - INFO - ===== 自动运行股票分析程序 - 定时模式 =====
 2025-09-15 23:18:33,521 - INFO - 每天预定执行时间: 09:45
+2025-09-15 23:44:53,259 - INFO - 从配置文件notification_config.json加载设置成功
+2025-09-15 23:44:53,259 - INFO - 从配置文件/home/yijian/workspace/yijian_stock_agent/auto_run_config.json加载设置成功
+2025-09-15 23:44:53,260 - INFO - ===== 自动运行股票分析程序 - 定时模式 =====
+2025-09-15 23:44:53,260 - INFO - 每天预定执行时间: 09:45

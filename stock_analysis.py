@@ -281,7 +281,7 @@ class StockAnalyzer:
                 # 检查是否可以获取涨跌幅信息
                 pct_chg = getattr(row, '涨跌幅', 'N/A')
                 volume = row.成交量
-                message += f"{i}. {row.名称}: {volume:,.2f}万手"
+                message += f"{i}. {row.名称}: {volume / 1000000:,.2f}万手"
                 if pct_chg != 'N/A':
                     message += f" (涨跌幅: {pct_chg:.2f}%)"
                 message += "\n"
