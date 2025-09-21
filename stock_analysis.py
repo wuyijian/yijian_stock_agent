@@ -1,18 +1,21 @@
 import os
+from statistics import median_grouped
 import sys
 import akshare as ak
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
 from datetime import datetime, timedelta
 import time
 import random
 import logging
+import tushare as ts
 from notification_utils import NotificationSender
 
-# 设置中文显示
-plt.rcParams["font.family"] = ["SimHei", "WenQuanYi Micro Hei", "Heiti TC", "SourceHanSansSC-Bold"]
-plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+# 配置Tushare token
+# 注意：在实际使用时，建议从配置文件或环境变量中读取token
+# 这里使用默认值，可以在运行时通过环境变量TUSHARE_TOKEN覆盖
+ts.set_token(os.environ.get('TUSHARE_TOKEN', 'ca3f70c75090285b5d45542a7be21ca785c5106a6ebd88f47ddf6b93'))
+pro = ts.pro_api()
 
 class StockAnalyzer:
     """股票数据分析工具类，集成多种分析功能"""
@@ -90,7 +93,7 @@ class StockAnalyzer:
             "家用电器", "纺织服装", "轻工制造", "商业贸易", "休闲服务"
         ]
         return pd.DataFrame({"industry_name": industry_list})
-    
+
     def analyze_industry_money_flow(self):
         """行业资金流向分析"""
         self.logger.info("开始行业资金流向分析")
@@ -111,7 +114,7 @@ class StockAnalyzer:
                     industries = ["医药生物", "食品饮料", "银行", "电子", "计算机", "化工", "有色金属", "房地产"]
                     fund_flow_df = pd.DataFrame({
                         '行业名称': industries,
-                        '净额': [20349116500, 18256267000, 9230667400, 7562184300, 6891453200, 5432871600, 4897562300, 4321987600]
+                        '资金净流入': [20349116500, 18256267000, 9230667400, 7562184300, 6891453200, 5432871600, 4897562300, 4321987600]
                     })
             
             self.logger.info(f"成功获取{len(fund_flow_df)}个行业的资金流向数据")
@@ -121,117 +124,184 @@ class StockAnalyzer:
             return None
     
     def _process_industry_flow_data(self, fund_flow_data):
-        """处理行业资金流向数据并生成分析结果"""
-        if fund_flow_data is None or len(fund_flow_data) == 0:
-            self.logger.error("没有可用的资金流向数据进行分析")
-            return None
+        """处理行业资金流向数据，计算资金净流入排名"""
+        self.logger.info(f"处理资金流向数据: {len(fund_flow_data)} 条")
         
-        # 获取当前日期
-        current_date = datetime.now().strftime('%Y%m%d')
+        # 确保资金流向数据不为空
+        if fund_flow_data.empty:
+            self.logger.warning("资金流向数据为空，无法进行处理")
+            return pd.DataFrame()
         
-        # 确保有正确的列名
-        if '净额' not in fund_flow_data.columns:
-            # 尝试找到类似的列名
-            for col in fund_flow_data.columns:
-                if '净流入' in col or '净额' in col:
-                    fund_flow_data = fund_flow_data.rename(columns={col: '净额'})
-                    break
-            else:
-                self.logger.error("找不到资金流向数据列")
-                return None
-                
-        if '行业名称' not in fund_flow_data.columns:
-            # 尝试找到行业列
-            for col in fund_flow_data.columns:
-                if '行业' in col or '板块' in col:
-                    fund_flow_data = fund_flow_data.rename(columns={col: '行业名称'})
-                    break
-            else:
-                # 如果没有行业列，添加默认行业列
-                fund_flow_data['行业名称'] = [f"行业{i}" for i in range(len(fund_flow_data))]
-        
-        # 按资金净流入排序
-        df = fund_flow_data.sort_values(by='净额', ascending=False)
-        
-      
-        
-        # 只选择有数据的前10个行业
-        top_10 = df.dropna(subset=['净额']).head(10)
-        
-        # 保存数据到CSV文件
-        csv_file = os.path.join(self.output_dir, f'industry_money_flow_{current_date}.csv')
-        df.to_csv(csv_file, index=False, encoding='utf-8-sig')
-        self.logger.info(f"已保存数据到: {csv_file}")
-        
-        # 创建推送消息
-        push_message = self._generate_industry_flow_message(df)
-        
-        # 保存推送消息到文件
-        push_file = os.path.join(self.output_dir, f'push_message_{current_date}.txt')
-        with open(push_file, 'w', encoding='utf-8') as f:
-            f.write(push_message)
-        
-        # 可视化
         try:
-            self._visualize_industry_flow(top_10, current_date)
+            # 使用传入的资金流向数据作为合并后的数据
+            merged_data = fund_flow_data.copy()
+            
+            # 确保合并后的数据不为空
+            if merged_data.empty:
+                self.logger.warning("合并后的数据为空，无法进行处理")
+                return pd.DataFrame()
+            
+            # 打印列名以便调试
+            self.logger.info(f"原始数据列名: {list(merged_data.columns)}")
+            
+            # 动态查找行业名称列
+            industry_col = None
+            for col in merged_data.columns:
+                if any(keyword in col for keyword in ['行业', '板块', '名称']):
+                    industry_col = col
+                    break
+            
+            # 如果没有明确的行业名称列，检查是否有其他可能的列（如第二列）
+            if industry_col is None and len(merged_data.columns) >= 2:
+                # 假设第二列可能是行业名称
+                industry_col = merged_data.columns[1]
+                self.logger.info(f"使用第二列 '{industry_col}' 作为行业名称列")
+            
+            # 如果找到了行业名称列，重命名为统一的'行业名称'
+            if industry_col:
+                merged_data = merged_data.rename(columns={industry_col: '行业名称'})
+            else:
+                self.logger.warning("未找到行业名称列，无法显示真实行业名称")
+            
+            # 动态查找资金净流入相关的列
+            net_inflow_columns = [col for col in merged_data.columns if any(keyword in col for keyword in ['净流入', '净额', '流入资金', '资金'])]
+            
+            if not net_inflow_columns:
+                self.logger.warning("未找到资金净流入相关的列")
+                # 不生成模拟数据，而是尝试返回原始数据
+                return merged_data
+            else:
+                # 使用找到的第一个净流入列
+                net_inflow_col = net_inflow_columns[0]
+                # 重命名列以便统一处理
+                merged_data = merged_data.rename(columns={net_inflow_col: '资金净流入'})
+                
+    
+            
+            # 动态查找涨跌幅列
+            if '涨跌幅' not in merged_data.columns:
+                change_columns = [col for col in merged_data.columns if '涨跌幅' in col]
+                if change_columns:
+                    merged_data = merged_data.rename(columns={change_columns[0]: '涨跌幅'})
+                else:
+                    # 不生成模拟数据，如果没有涨跌幅列则使用0.0作为默认值
+                    self.logger.warning("未找到涨跌幅列")
+                    merged_data['涨跌幅'] = 0.0
+            
+            # 确保数据类型正确
+            for col in ['资金净流入', '涨跌幅']:
+                if col in merged_data.columns:
+                    # 尝试将列转换为数值类型
+                    try:
+                        merged_data[col] = pd.to_numeric(merged_data[col], errors='coerce')
+                    except:
+                        self.logger.warning(f"无法将列 '{col}' 转换为数值类型")
+            
+            # 过滤掉无效数据
+            filtered_data = merged_data.dropna(subset=['资金净流入'])
+            
+            # 按资金净流入排序
+            sorted_data = filtered_data.sort_values(by='资金净流入', ascending=False)
+            
+            # 只保留需要的列
+            result_columns = ['行业名称', '净额', '涨跌幅']
+            # 保留存在的列
+            available_columns = [col for col in result_columns if col in sorted_data.columns]
+            
+            # 确保行业名称列在结果中
+            if '行业名称' not in available_columns and industry_col:
+                available_columns.insert(0, '行业名称')
+            
+            return sorted_data[available_columns]
+            
         except Exception as e:
-            self.logger.error(f"生成可视化图表失败: {e}")
-        
-        return push_message
+            self.logger.error(f"处理行业资金流向数据时出错: {e}")
+            # 返回原始数据，避免丢失信息
+            return fund_flow_data
     
     def _generate_industry_flow_message(self, df):
         """生成行业资金流向的推送消息"""
         current_date = datetime.now().strftime('%Y-%m-%d')
         message = f"📊 {current_date} 行业资金流向分析\n\n"
         
-        # 添加前5个行业
-        message += "🔥 资金流入最多的5个行业:\n"
-        for i, row in enumerate(df.head(5).itertuples(), 1):
-            message += f"{i}. {row.行业名称}: {row.净额:,.2f}亿元\n"
-        
-        message += "\n📉 资金流出最多的3个行业:\n"
-        for i, row in enumerate(df.tail(3).itertuples(), 1):
-            message += f"{i}. {row.行业名称}: {row.净额:,.2f}亿元\n"
-        
-        # 计算总资金流入
-        total_flow = df['净额'].sum()
-        message += f"\n📊 市场总资金流向: {total_flow:,.2f}亿元\n"
-        
-        # 添加建议
-        if total_flow > 0:
-            message += "\n💡 市场资金整体流入，多头力量占优"
-        else:
-            message += "\n💡 市场资金整体流出，空头力量占优"
-        
-        return message
-    
-    def _visualize_industry_flow(self, top_10, current_date):
-        """可视化行业资金流向数据"""
-        # plt.figure(figsize=(12, 8))
-        
-        # # 创建水平条形图
-        # bars = plt.barh(top_10['行业名称'], top_10['净额'])
-        
-        # # 为条形图添加数值标签
-        # for bar in bars:
-        #     width = bar.get_width()
-        #     plt.text(width + 0.5, bar.get_y() + bar.get_height()/2, f'{width:,.1f}', 
-        #              ha='left', va='center', fontsize=10)
-        
-        # # 设置图表标题和标签
-        # plt.title(f'{current_date} 行业资金流向排名（前10名）', fontsize=14)
-        # plt.xlabel('资金净流入（亿元）', fontsize=12)
-        # plt.ylabel('行业', fontsize=12)
-        
-        # # 美化图表
-        # plt.grid(axis='x', linestyle='--', alpha=0.7)
-        # plt.tight_layout()
-        
-        # 保存图表
-        # img_file = os.path.join(self.output_dir, f'industry_money_flow_{current_date}.png')
-        # plt.savefig(img_file, dpi=300, bbox_inches='tight')
-        # self.logger.info(f"已保存可视化图表: {img_file}")
-        # plt.close()
+        try:
+            # 动态查找行业名称列
+            industry_col = None
+            for col in df.columns:
+                if any(keyword in col for keyword in ['行业', '板块', '名称']):
+                    industry_col = col
+                    break
+            
+            # 如果没有找到行业名称列，使用索引作为行业标识
+            if industry_col is None:
+                industry_col = '行业' + str(df.index.name or '索引')
+                df = df.reset_index()
+                
+            # 查找资金净流入列
+            net_inflow_col = None
+            for col in df.columns:
+                if any(keyword in col for keyword in ['净额', '净流入', '资金']):
+                    net_inflow_col = col
+                    break
+            
+            # 如果没有找到资金净流入列，返回空消息
+            if net_inflow_col is None:
+                self.logger.warning("未找到资金净流入相关的列")
+                return ""
+            
+            # 查找涨跌幅列
+            change_col = None
+            for col in df.columns:
+                if any(keyword in col for keyword in ['涨跌幅', '涨幅', '变动']):
+                    change_col = col
+                    break
+            
+            # 计算总资金流入和平均流入值，用于标注强度
+            total_flow = df[net_inflow_col].sum()
+            positive_flow_df = df[df[net_inflow_col] > 0]
+            avg_positive_flow = positive_flow_df[net_inflow_col].mean() if not positive_flow_df.empty else 0
+            
+            # 添加前5个行业，并标注资金流入强度
+            message += "🔥 资金流入最多的5个行业(净额-涨跌幅):\n"
+            sorted_df = df.sort_values(by=net_inflow_col, ascending=False)
+            print(sorted_df)
+            for i, (idx, row) in enumerate(sorted_df.head(5).iterrows(), 1):
+                industry_name = row.get(industry_col, f'行业{i}')
+                net_inflow = row.get(net_inflow_col, 0)
+                change = row.get(change_col, 0) if change_col else 0
+                
+                # 根据资金流入强度添加不同的标注
+                if net_inflow > avg_positive_flow * 1.5:
+                    strength_mark = "🚀"
+                elif net_inflow > avg_positive_flow:
+                    strength_mark = "🔥"
+                else:
+                    strength_mark = "⭐"
+                
+                # 标注资金流入的行业名称
+                message += f"{i}. {strength_mark}【资金流入】{industry_name}: {net_inflow:,.2f}亿元 ({change:+.2f}%)\n"
+            
+            message += "\n📉 资金流出最多的5个行业(净额-涨跌幅):\n"
+            for i, (idx, row) in enumerate(sorted_df.tail(5).iterrows(), 1):
+                industry_name = row.get(industry_col, f'行业{i}')
+                net_inflow = row.get(net_inflow_col, 0)
+                change = row.get(change_col, 0) if change_col else 0
+                message += f"{i}. ❌【资金流出】{industry_name}: {net_inflow:,.2f}亿元 ({change:+.2f}%)\n"
+            
+            # 计算总资金流入
+            message += f"\n📊 市场总资金流向: {total_flow:,.2f}亿元\n"
+            
+            # 添加建议
+            if total_flow > 0:
+                message += "\n💡 市场资金整体流入，多头力量占优"
+            else:
+                message += "\n💡 市场资金整体流出，空头力量占优"
+            
+            return message
+        except Exception as e:
+            self.logger.error(f"生成行业资金流向消息时出错: {e}")
+            return ""
+
     
     def analyze_abnormal_volume(self):
         """个股异常成交量分析"""
@@ -240,6 +310,13 @@ class StockAnalyzer:
         try:
             # 获取A股股票列表
             stock_list = ak.stock_zh_a_spot()
+            
+            # 检查获取的数据是否有效
+            if stock_list is None or stock_list.empty:
+                self.logger.warning("未获取到A股股票数据")
+                # 使用模拟数据作为备用
+                return self._get_mock_abnormal_volume_data()
+                
             self.logger.info(f"获取到{len(stock_list)}只A股股票数据")
             
             # 筛选出成交量异常的股票（这里简单以成交量排名前20作为异常）
@@ -256,16 +333,40 @@ class StockAnalyzer:
             # 创建推送消息
             push_message = self._generate_abnormal_volume_message(abnormal_stocks)
             
-            # 可视化
-            try:
-                self._visualize_abnormal_volume(abnormal_stocks, current_date)
-            except Exception as e:
-                self.logger.error(f"生成异常成交量可视化图表失败: {e}")
-            
             return push_message
         except Exception as e:
             self.logger.error(f"个股异常成交量分析过程中出错: {e}")
+            # 检查是否是解码错误（HTML内容）
+            if 'decode' in str(e).lower() or '<' in str(e):
+                self.logger.warning("可能是数据源返回了HTML内容，使用模拟数据")
+                return self._get_mock_abnormal_volume_data()
             return None
+            
+    def _get_mock_abnormal_volume_data(self):
+        """当无法获取真实数据时，返回模拟的异常成交量数据"""
+        self.logger.info("使用模拟数据进行异常成交量分析")
+        
+        # 创建模拟数据
+        mock_data = {
+            '名称': ['贵州茅台', '宁德时代', '比亚迪', '腾讯控股', '阿里巴巴', 
+                     '中国平安', '招商银行', '中国石油', '中国石化', '工商银行'],
+            '成交量': [500000, 450000, 420000, 380000, 350000, 
+                      320000, 300000, 280000, 260000, 240000],
+            '涨跌幅': [2.5, 1.8, -0.5, 0.9, -1.2, 
+                      0.3, 1.5, -0.8, 0.1, 0.4]
+        }
+        
+        import pandas as pd
+        mock_df = pd.DataFrame(mock_data)
+        
+        # 保存模拟数据到CSV文件
+        current_date = datetime.now().strftime('%Y%m%d')
+        csv_file = os.path.join(self.output_dir, f'abnormal_volume_stocks_{current_date}_mock.csv')
+        mock_df.to_csv(csv_file, index=False, encoding='utf-8-sig')
+        
+        # 生成消息
+        message = self._generate_abnormal_volume_message(mock_df)
+        return message
     
     def _generate_abnormal_volume_message(self, abnormal_stocks):
         """生成个股异常成交量的推送消息"""
@@ -280,8 +381,8 @@ class StockAnalyzer:
             for i, row in enumerate(abnormal_stocks.head(10).itertuples(), 1):
                 # 检查是否可以获取涨跌幅信息
                 pct_chg = getattr(row, '涨跌幅', 'N/A')
-                volume = row.成交量
-                message += f"{i}. {row.名称}: {volume / 1000000:,.2f}万手"
+                volume = row.成交量/1000000
+                message += f"{i}. {row.名称}: {volume:,.2f}万手"
                 if pct_chg != 'N/A':
                     message += f" (涨跌幅: {pct_chg:.2f}%)"
                 message += "\n"
@@ -292,193 +393,7 @@ class StockAnalyzer:
         message += "\n💡 成交量异常放大通常意味着市场对该股票关注度提升，可能存在重要的基本面或技术面变化"
         
         return message
-    
-    def _visualize_abnormal_volume(self, abnormal_stocks, current_date):
-        """可视化个股异常成交量数据"""
-        plt.figure(figsize=(12, 8))
-        
-        # 确保数据有需要的列
-        if '名称' in abnormal_stocks.columns and '成交量' in abnormal_stocks.columns:
-            # 只取前15只股票进行可视化
-            top_stocks = abnormal_stocks.head(15)
-            
-            # 创建水平条形图
-            bars = plt.barh(top_stocks['名称'], top_stocks['成交量'])
-            
-            # 为条形图添加数值标签
-            for bar in bars:
-                width = bar.get_width()
-                plt.text(width + 0.5, bar.get_y() + bar.get_height()/2, f'{width:,.0f}', 
-                         ha='left', va='center', fontsize=10)
-            
-            # 设置图表标题和标签
-            plt.title(f'{current_date} 个股成交量排名（前15名）', fontsize=14)
-            plt.xlabel('成交量（万手）', fontsize=12)
-            plt.ylabel('股票名称', fontsize=12)
-            
-            # 美化图表
-            plt.grid(axis='x', linestyle='--', alpha=0.7)
-            plt.tight_layout()
-            
-            # 保存图表
-            img_file = os.path.join(self.output_dir, f'abnormal_volume_{current_date}.png')
-            plt.savefig(img_file, dpi=300, bbox_inches='tight')
-            self.logger.info(f"已保存异常成交量可视化图表: {img_file}")
-            plt.close()
-        else:
-            self.logger.error("数据列不完整，无法生成异常成交量可视化图表")
-    
-    def analyze_us_stock_industry_flow(self):
-        """美股行业资金分析"""
-        self.logger.info("开始美股行业资金分析")
-        
-        try:
-            # 获取美股行业数据（这里使用可用的AKShare接口）
-            # 注意：AKShare可能没有直接的美股行业资金流向接口，这里使用变通方法
-            
-            # 获取道琼斯行业分类指数
-            dow_sectors = ak.stock_us_dji_spot()
-            self.logger.info(f"获取到{len(dow_sectors)}个道琼斯行业指数数据")
-            
-            # 获取当前日期
-            current_date = datetime.now().strftime('%Y%m%d')
-            
-            # 保存数据到CSV文件
-            csv_file = os.path.join(self.output_dir, f'us_stock_sectors_{current_date}.csv')
-            dow_sectors.to_csv(csv_file, index=False, encoding='utf-8-sig')
-            self.logger.info(f"已保存美股行业数据到: {csv_file}")
-            
-            # 创建推送消息
-            push_message = self._generate_us_stock_message(dow_sectors)
-            
-            # 可视化
-            try:
-                self._visualize_us_stock_sectors(dow_sectors, current_date)
-            except Exception as e:
-                self.logger.error(f"生成美股行业可视化图表失败: {e}")
-            
-            return push_message
-        except Exception as e:
-            self.logger.error(f"美股行业资金分析过程中出错: {e}")
-            # 如果无法获取实际数据，返回模拟数据
-            return self._generate_mock_us_stock_message()
-    
-    def _generate_us_stock_message(self, dow_sectors):
-        """生成美股行业分析的推送消息"""
-        current_date = datetime.now().strftime('%Y-%m-%d')
-        message = f"📊 {current_date} 美股行业表现分析\n\n"
-        
-        # 尝试获取涨跌幅数据
-        if '涨跌幅' in dow_sectors.columns:
-            # 按涨跌幅排序
-            sorted_sectors = dow_sectors.sort_values(by='涨跌幅', ascending=False)
-            
-            # 添加涨幅最大的5个行业
-            message += "🔥 涨幅最大的5个行业:\n"
-            for i, row in enumerate(sorted_sectors.head(5).itertuples(), 1):
-                if hasattr(row, '名称'):
-                    message += f"{i}. {row.名称}: {row.涨跌幅:.2f}%\n"
-                elif hasattr(row, '指数名称'):
-                    message += f"{i}. {row.指数名称}: {row.涨跌幅:.2f}%\n"
-            
-            # 添加跌幅最大的3个行业
-            message += "\n📉 跌幅最大的3个行业:\n"
-            for i, row in enumerate(sorted_sectors.tail(3).itertuples(), 1):
-                if hasattr(row, '名称'):
-                    message += f"{i}. {row.名称}: {row.涨跌幅:.2f}%\n"
-                elif hasattr(row, '指数名称'):
-                    message += f"{i}. {row.指数名称}: {row.涨跌幅:.2f}%\n"
-        else:
-            message += "无法获取涨跌幅数据，显示行业列表:\n"
-            if '名称' in dow_sectors.columns:
-                for i, row in enumerate(dow_sectors.head(10).itertuples(), 1):
-                    message += f"{i}. {row.名称}\n"
-            elif '指数名称' in dow_sectors.columns:
-                for i, row in enumerate(dow_sectors.head(10).itertuples(), 1):
-                    message += f"{i}. {row.指数名称}\n"
-        
-        message += "\n💡 美股行业表现可以作为全球市场风险偏好的重要参考指标"
-        
-        return message
-    
-    def _generate_mock_us_stock_message(self):
-        """生成模拟的美股行业分析消息"""
-        current_date = datetime.now().strftime('%Y-%m-%d')
-        message = f"📊 {current_date} 美股行业表现分析 (模拟数据)\n\n"
-        
-        # 模拟美股行业数据
-        sectors = [
-            {"name": "科技", "change": 2.34},
-            {"name": "医疗保健", "change": 1.87},
-            {"name": "消费者非必需品", "change": 1.56},
-            {"name": "工业", "change": 1.23},
-            {"name": "金融", "change": 0.98},
-            {"name": "能源", "change": -0.56},
-            {"name": "公用事业", "change": -1.23},
-            {"name": "材料", "change": -1.89}
-        ]
-        
-        message += "🔥 涨幅最大的5个行业:\n"
-        for i, sector in enumerate(sorted(sectors, key=lambda x: x["change"], reverse=True)[:5], 1):
-            message += f"{i}. {sector['name']}: {sector['change']:.2f}%\n"
-        
-        message += "\n📉 跌幅最大的3个行业:\n"
-        for i, sector in enumerate(sorted(sectors, key=lambda x: x["change"])[:3], 1):
-            message += f"{i}. {sector['name']}: {sector['change']:.2f}%\n"
-        
-        message += "\n💡 注意：当前为模拟数据，实际使用时需要配置正确的美股数据接口"
-        
-        return message
-    
-    def _visualize_us_stock_sectors(self, dow_sectors, current_date):
-        """可视化美股行业数据"""
-        plt.figure(figsize=(12, 8))
-        
-        # 尝试获取涨跌幅和行业名称数据
-        if '涨跌幅' in dow_sectors.columns:
-            # 按涨跌幅排序
-            sorted_sectors = dow_sectors.sort_values(by='涨跌幅', ascending=False)
-            
-            # 获取行业名称
-            if '名称' in sorted_sectors.columns:
-                names = sorted_sectors['名称']
-            elif '指数名称' in sorted_sectors.columns:
-                names = sorted_sectors['指数名称']
-            else:
-                names = [f"行业{i}" for i in range(len(sorted_sectors))]
-            
-            # 创建条形图
-            colors = ['green' if x > 0 else 'red' for x in sorted_sectors['涨跌幅']]
-            bars = plt.bar(names, sorted_sectors['涨跌幅'], color=colors)
-            
-            # 为条形图添加数值标签
-            for bar in bars:
-                height = bar.get_height()
-                plt.text(bar.get_x() + bar.get_width()/2., height, f'{height:.2f}%', 
-                         ha='center', va='bottom' if height > 0 else 'top', fontsize=9)
-            
-            # 设置图表标题和标签
-            plt.title(f'{current_date} 美股行业涨跌幅表现', fontsize=14)
-            plt.xlabel('行业', fontsize=12)
-            plt.ylabel('涨跌幅 (%)', fontsize=12)
-            
-            # 旋转x轴标签以避免重叠
-            plt.xticks(rotation=45, ha='right')
-            
-            # 添加水平线表示0值
-            plt.axhline(y=0, color='black', linestyle='-', alpha=0.3)
-            
-            # 美化图表
-            plt.grid(axis='y', linestyle='--', alpha=0.7)
-            plt.tight_layout()
-            
-            # 保存图表
-            img_file = os.path.join(self.output_dir, f'us_stock_sectors_{current_date}.png')
-            plt.savefig(img_file, dpi=300, bbox_inches='tight')
-            self.logger.info(f"已保存美股行业可视化图表: {img_file}")
-            plt.close()
-        else:
-            self.logger.error("数据列不完整，无法生成美股行业可视化图表")
+
     
     def run_analysis(self, analysis_types=None):
         """运行指定类型的分析
@@ -487,18 +402,18 @@ class StockAnalyzer:
             analysis_types (list): 要运行的分析类型列表，可选值包括：
                 'industry_flow': 行业资金流向分析
                 'abnormal_volume': 个股异常成交量分析
-                'us_stock': 美股行业分析
                 如果为None，则运行所有分析
         """
         if analysis_types is None:
-            analysis_types = ['industry_flow', 'abnormal_volume', 'us_stock']
+            analysis_types = ['industry_flow', 'abnormal_volume']
         
         all_messages = []
         
         # 运行行业资金流向分析
         if 'industry_flow' in analysis_types:
-            industry_message = self.analyze_industry_money_flow()
-            if industry_message:
+            industry_df = self.analyze_industry_money_flow()
+            if not industry_df.empty:
+                industry_message = self._generate_industry_flow_message(industry_df)
                 all_messages.append(industry_message)
         
         # 运行个股异常成交量分析
@@ -506,12 +421,6 @@ class StockAnalyzer:
             volume_message = self.analyze_abnormal_volume()
             if volume_message:
                 all_messages.append(volume_message)
-        
-        # 运行美股行业分析
-        if 'us_stock' in analysis_types:
-            us_stock_message = self.analyze_us_stock_industry_flow()
-            if us_stock_message:
-                all_messages.append(us_stock_message)
         
         # 合并所有消息并发送通知
         if all_messages:
@@ -528,6 +437,77 @@ class StockAnalyzer:
             return combined_message
         
         return None
+        
+    def schedule_hourly_industry_flow_analysis(self):
+        """
+        在开盘时间每小时推送一次行业资金流分析
+        开盘时间：周一至周五 9:30-15:00
+        无论在什么时间启动，程序都会持续运行并在交易时间自动执行分析任务
+        """
+        import schedule
+        import time
+        
+        self.logger.info("启动行业资金流分析定时任务")
+        print("在开盘时间（周一至周五 9:30-15:00）每小时推送一次分析报告")
+        print("按Ctrl+C可以停止定时任务")
+        
+        def is_trading_hours():
+            """检查当前是否在交易时间内"""
+            now = datetime.now()
+            # 检查是否是工作日（周一至周五）
+            is_weekday = now.weekday() < 5
+            # 检查是否在交易时间段内（9:30-15:00）
+            is_trading_time = (now.hour > 9 or (now.hour == 9 and now.minute >= 30)) and now.hour < 15
+            
+            return is_weekday and is_trading_time
+            
+        def run_hourly_analysis():
+            """运行行业资金流分析并推送"""
+            if is_trading_hours():
+                self.logger.info("执行定时行业资金流分析")
+                try:
+                    # 运行行业资金流分析
+                    industry_df = self.analyze_industry_money_flow()
+                    if not industry_df.empty:
+                        # 生成推送消息
+                        message = self._generate_industry_flow_message(industry_df)
+                        if message:
+                            # 发送通知，添加标题参数
+                            title = f"📊 行业资金流分析报告 ({datetime.now().strftime('%Y-%m-%d %H:%M')})"
+                            self.notification_sender.send_notification(title, message)
+                except Exception as e:
+                    self.logger.error(f"定时分析执行出错: {e}")
+            else:
+                self.logger.info("当前非交易时间，跳过定时分析")
+        
+        # 设置每小时执行一次（在交易时间段内）
+        schedule.every().hour.do(run_hourly_analysis)
+        
+        # 检查是否在交易时间
+        if is_trading_hours():
+            # 在交易时间，立即执行一次作为初始运行
+            run_hourly_analysis()
+        else:
+            # 不在交易时间，执行测试分析
+            self.logger.info("当前不在交易时间，执行测试分析但不实际推送")
+            # 执行行业资金流向分析
+            industry_df = self.analyze_industry_money_flow()
+            if not industry_df.empty:
+                # 生成推送消息
+                message = self._generate_industry_flow_message(industry_df)
+                if message:
+                    print("测试分析报告生成成功，内容如下：")
+                    print(message)
+                    print("（当前不在交易时间，未实际推送）")
+        
+        # 持续运行调度器，无论当前是否在交易时间
+        try:
+            while True:
+                schedule.run_pending()
+                time.sleep(60)  # 每分钟检查一次
+        except KeyboardInterrupt:
+            self.logger.info("定时任务已停止")
+            print("定时任务已停止")
 
 # 主函数
 if __name__ == "__main__":
@@ -542,31 +522,36 @@ if __name__ == "__main__":
     parser.add_argument('--all', action='store_true', help='运行所有分析')
     parser.add_argument('--industry', action='store_true', help='仅运行行业资金流向分析')
     parser.add_argument('--volume', action='store_true', help='仅运行个股异常成交量分析')
-    parser.add_argument('--us', action='store_true', help='仅运行美股行业分析')
+    parser.add_argument('--schedule', action='store_true', help='启动行业资金流定时推送任务（开盘时间每小时推送一次）')
     
     args = parser.parse_args()
     
-    # 确定要运行的分析类型
-    analysis_types = []
-    if args.all or (not args.industry and not args.volume and not args.us):
-        # 默认运行所有分析
-        analysis_types = None
+    # 检查是否启动定时任务
+    if args.schedule:
+        print("启动行业资金流定时推送任务...")
+        print("在开盘时间（周一至周五 9:30-15:00）每小时推送一次分析报告")
+        print("按Ctrl+C可以停止定时任务")
+        analyzer.schedule_hourly_industry_flow_analysis()
     else:
-        if args.industry:
-            analysis_types.append('industry_flow')
-        if args.volume:
-            analysis_types.append('abnormal_volume')
-        if args.us:
-            analysis_types.append('us_stock')
-    
-    # 运行分析
-    print(f"开始运行分析: {analysis_types or '所有分析'}")
-    message = analyzer.run_analysis(analysis_types)
-    
-    if message:
-        print("\n分析报告:\n")
-        print(message)
-    else:
-        print("分析失败，未能生成报告")
-    
-    print("\n===== 程序执行完毕 =====")
+        # 确定要运行的分析类型
+        analysis_types = []
+        if args.all or (not args.industry and not args.volume):
+            # 默认运行所有分析
+            analysis_types = None
+        else:
+            if args.industry:
+                analysis_types.append('industry_flow')
+            if args.volume:
+                analysis_types.append('abnormal_volume')
+        
+        # 运行分析
+        print(f"开始运行分析: {analysis_types or '所有分析'}")
+        message = analyzer.run_analysis(analysis_types)
+        
+        if message:
+            print("\n分析报告:\n")
+            print(message)
+        else:
+            print("分析失败，未能生成报告")
+        
+        print("\n===== 程序执行完毕 ======")

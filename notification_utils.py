@@ -1,4 +1,3 @@
-import requests
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -7,6 +6,7 @@ import json
 import logging
 from email.header import Header
 import time
+import requests  # 添加缺失的requests库导入
 
 class NotificationSender:
     """通知发送工具类，支持多种推送方式"""
@@ -211,42 +211,15 @@ class NotificationSender:
             return False
     
     def send_notification(self, title, content, methods=None):
-        """统一发送通知接口，支持多种方式同时发送"""
-        # 如果未指定发送方式，使用所有已配置的方式
-        if not methods:
-            methods = []
-            if self.config.get('wechat_work', {}).get('webhook'):
-                methods.append('wechat_work')
-            elif self.config.get('server_chan', {}).get('sendkey'):
-                methods.append('server_chan')
-            if self.config.get('pushplus', {}).get('token'):
-                methods.append('pushplus')
-            if self.config.get('email', {}).get('smtp_server'):
-                methods.append('email')
-            if self.config.get('dingtalk', {}).get('access_token'):
-                methods.append('dingtalk')
-        
+        """统一发送通知接口，仅支持企业微信群机器人通知"""
         results = {}
         
-        # 发送通知
-        if 'wechat_work' in methods:
+        # 只使用企业微信群机器人通知
+        if self.config.get('wechat_work', {}).get('webhook'):
             results['wechat_work'] = self.send_wechat_work(title, content)
-        
-        if 'server_chan' in methods:
-            results['server_chan'] = self.send_server酱(title, content)
-        
-        if 'pushplus' in methods:
-            results['pushplus'] = self.send_pushplus(title, content)
-        
-        if 'email' in methods:
-            results['email'] = self.send_email(title, content)
-        
-        if 'dingtalk' in methods:
-            results['dingtalk'] = self.send_dingtalk(title, content)
-        
-        # 如果没有配置任何发送方式，打印通知内容到控制台
-        if not methods:
-            self.logger.info(f"未配置任何通知方式，以下是通知内容:\n标题: {title}\n内容:\n{content}")
+        else:
+            # 如果没有配置企业微信群机器人，打印通知内容到控制台
+            self.logger.info(f"未配置企业微信群机器人，以下是通知内容:\n标题: {title}\n内容:\n{content}")
             results['console'] = True
         
         return results

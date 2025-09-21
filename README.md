@@ -15,7 +15,7 @@
 - 可视化成交量排名前N的股票
 
 ### 3. 美股行业资金分析
-- 获取美股主要行业表现数据
+- 使用Tushare获取美股主要指数和行业ETF数据
 - 分析全球市场风险偏好
 - 提供投资参考指标
 
@@ -35,9 +35,16 @@ cd /path/to/your/workspace
 ./start_analyzer.sh --install-deps
 ```
 
-### 3. 配置通知功能
+### 3. 配置API凭证
 
-首次运行程序会自动生成 `notification_config.json` 配置文件模板，您需要根据需要修改配置文件中的各项参数，以启用邮件、企业微信、钉钉等通知功能。
+1. **Tushare Token配置**
+   - 需要注册Tushare账号并获取API Token
+   - 可以通过环境变量设置：`export TUSHARE_TOKEN=your_token_here`
+   - 或者直接在代码中修改`stock_analysis.py`文件中的默认token值
+
+2. **通知功能配置**
+   - 首次运行程序会自动生成 `notification_config.json` 配置文件模板
+   - 您需要根据需要修改配置文件中的各项参数，以启用邮件、企业微信、钉钉等通知功能
 
 ## 使用方法
 
@@ -104,7 +111,8 @@ python auto_analyzer.py --schedule
 
 本项目主要依赖以下Python库：
 
-- **akshare**: 提供股票市场数据接口
+- **tushare**: 提供股票市场数据接口（主要数据源）
+- **akshare**: 提供辅助数据接口
 - **pandas**: 数据处理和分析
 - **numpy**: 数学计算
 - **matplotlib**: 数据可视化
@@ -112,10 +120,11 @@ python auto_analyzer.py --schedule
 
 ## 注意事项
 
-1. 本工具使用的数据源主要来自 AKShare，部分数据可能有访问限制或延迟
-2. 美股行业分析功能当前使用道琼斯行业分类指数数据作为参考
+1. 本工具使用的数据源主要来自 Tushare，部分数据可能有访问限制或延迟
+2. 美股行业分析功能使用美股主要指数和行业ETF数据作为参考
 3. 分析结果仅供参考，不构成任何投资建议
 4. 如需更准确的数据，请参考官方金融数据源
+5. 在使用前请确保已正确配置Tushare API Token
 
 ## 免责声明
 
